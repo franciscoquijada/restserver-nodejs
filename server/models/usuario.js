@@ -40,6 +40,16 @@ let usuarioSchema = new Schema({
     }
 });
 
+//No usamos funcion de flecha porque necesitamos el this
+usuarioSchema.methods.toJSON = function() {
+
+    let user = this;
+    let userObject = user.toObject();
+    delete userObject.password;
+
+    return userObject;
+}
+
 usuarioSchema.plugin(uniqueValidator, {message: 'El campo {PATH} debe ser unico'});
 
 //Realizo exportacion de modulo estableciendole como nombre Usuario
