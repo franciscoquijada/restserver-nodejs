@@ -1,6 +1,11 @@
 const moongose = require('mongoose');
-
+var uniqueValidator = require('mongoose-unique-validator');
 let Schema = moongose.Schema;
+
+let rolesValidos = {
+    values: ['ADMIN_ROLE', 'USER_ROLE'],
+    message: '{VALUE} no es un rol valido'
+};
 
 let usuarioSchema = new Schema({
     nombre: {
@@ -22,7 +27,8 @@ let usuarioSchema = new Schema({
     },
     role: {
         type: String,
-        default: 'USER_ROLE'
+        default: 'USER_ROLE',
+        enum: rolesValidos
     },
     estado: {
         type: Boolean,
@@ -33,5 +39,8 @@ let usuarioSchema = new Schema({
         default: false
     }
 });
+
+usuarioSchema.plugin(uniqueValidator, {message: 'El campo {PATH} debe ser unico'});
+
 //Realizo exportacion de modulo estableciendole como nombre Usuario
 module.exports = moongose.model('Usuario', usuarioSchema);
