@@ -13,7 +13,7 @@ app.get('/usuarios', function(req, res) {
     let limite = req.query.limite || 5;
     limite = Number(limite);
 
-    Usuario.find({})
+    Usuario.find({}, 'nombre email img role estado google')
     .skip(desde)
     .limit(limite)
     .exec((err, usuarios) =>{
@@ -67,7 +67,7 @@ app.post('/usuarios', function(req, res) {
     //res.json('Post de usuarios ');
 });
 
-app.put('/usuarios/:id', function(req, res) {
+app.put('/usuario/:id', function(req, res) {
     let id = req.params.id;
     //let body = req.body;
     let body = _.pick(req.body, ['nombre', 'email', 'img', 'role', 'estado']);
@@ -92,8 +92,32 @@ app.put('/usuarios/:id', function(req, res) {
 
 
 //Peticiones delete
-app.delete('/usuarios', function(req, res){
-    res.json('Delete de usuarios');
+app.delete('/usuario/:id', function(req, res){
+    
+    let id = req.params.id; 
+
+    Usuario.findByIdAndRemove(id, (error, UsuarioBorrado) => {
+        //Verifico error
+        if(error){
+            return res.status(400).json({
+                ok: false,
+                error
+            });
+        }
+        //Si el usuario recibido es nulo
+        if(!UsuarioBorrado)
+            res.status(400).json({
+                ok: false,
+                error: 'Usuario no existe'
+            });
+        //Si se pudo borrar el usuario correctamente
+        res.json({
+            ok: true,
+            usuario: UsuarioBorrado
+        });
+    });
+
+    //res.json('Delete de usuarios');
 });
 
 module.exports = app;
