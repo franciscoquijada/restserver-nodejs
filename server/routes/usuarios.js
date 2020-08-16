@@ -88,15 +88,17 @@ app.put('/usuario/:id', function(req, res) {
     });
 });
 
-   
 
 
 //Peticiones delete
 app.delete('/usuario/:id', function(req, res){
-    
-    let id = req.params.id; 
+    let id = req.params.id;
 
-    Usuario.findByIdAndRemove(id, (error, UsuarioBorrado) => {
+    let estadoCambiado = {
+        estado: false,
+    };
+
+    Usuario.findByIdAndUpdate(id, estadoCambiado, {new: true}, (error, UsuarioBorrado) => {
         //Verifico error
         if(error){
             return res.status(400).json({
