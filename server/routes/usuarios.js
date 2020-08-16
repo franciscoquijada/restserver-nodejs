@@ -40,10 +40,28 @@ app.post('/usuarios', function(req, res) {
     //res.json('Post de usuarios ');
 });
 
-//Peticiones put
-app.put('/usuarios', function(req, res){
-    res.json('Put de usuarios')
+app.put('/usuarios/:id', function(req, res) {
+    let id = req.params.id;
+    let body = req.body;
+
+    Usuario.findByIdAndUpdate(id, body, {new: true}, (error, usuarioBd) => {
+
+        if(error){
+            return res.status(400).json({
+                ok: false,
+                error
+            });
+        }
+
+        res.json({
+            ok: true,
+            usuario: usuarioBd
+        });
+    });
 });
+
+   
+
 
 //Peticiones delete
 app.delete('/usuarios', function(req, res){
