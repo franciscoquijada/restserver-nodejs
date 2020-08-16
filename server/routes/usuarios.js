@@ -6,11 +6,13 @@ const Usuario = require('../models/usuario');
 
 //Peticiones get
 app.get('/usuarios', function(req, res) {
-    
+    //Obtengo desde los parametros el desde
     let desde = req.query.desde || 0;
     desde = Number(desde);
+    //Obtengo desde los parametros el limite
     let limite = req.query.limite || 5;
     limite = Number(limite);
+
     Usuario.find({})
     .skip(desde)
     .limit(limite)
@@ -21,13 +23,15 @@ app.get('/usuarios', function(req, res) {
                 err: error
             });
         }
-        
-        res.json({
-            ok: true,
-            usuarios
+        //Para devolver cantidad de registros
+        Usuario.count({}, (error, cantidadRegistros) => {
+            res.json({
+                ok: true,
+                usuarios,
+                cantidad_registros : cantidadRegistros
+            });
         });
     });
-    
     //res.json('Get de usuarios');
 });
 
