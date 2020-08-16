@@ -6,7 +6,29 @@ const Usuario = require('../models/usuario');
 
 //Peticiones get
 app.get('/usuarios', function(req, res) {
-    res.json('Get de usuarios');
+    
+    let desde = req.query.desde || 0;
+    desde = Number(desde);
+    let limite = req.query.limite || 5;
+    limite = Number(limite);
+    Usuario.find({})
+    .skip(desde)
+    .limit(limite)
+    .exec((err, usuarios) =>{
+        if(err){
+            return res.status(400).json({
+                ok: false,
+                err: error
+            });
+        }
+        
+        res.json({
+            ok: true,
+            usuarios
+        });
+    });
+    
+    //res.json('Get de usuarios');
 });
 
 //Peticiones post
