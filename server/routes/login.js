@@ -35,7 +35,7 @@ app.post('/login', /*verificarToken,*/ (req, res) => {
             return res.status(400).json({
                 ok: false,
                 error: {
-                    mensaje: 'La contraseña no es correcta'
+                    mensaje: 'Email o contraseña incorrectos'
                 }
             });
         }
