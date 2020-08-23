@@ -9,7 +9,9 @@ let verificarToken = (req, res, next) => {
         if(error){
             return res.status(401).json({
                 ok: false,
-                error
+                error: {
+                    message: 'token invalido'
+                }
             });
         }
         //Si todo va bien permite pasar a la peticion
