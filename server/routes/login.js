@@ -7,7 +7,7 @@ const {verificarToken} = require('../middlewares/authentication');
 
 const app = express();
 
-app.post('/login', verificarToken, (req, res) => {
+app.post('/login', /*verificarToken,*/ (req, res) => {
 
     //Obtengo el email y password enviado a la peticion
     let body = req.body;
