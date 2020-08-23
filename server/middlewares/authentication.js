@@ -1,6 +1,6 @@
 let jwt = require('jsonwebtoken');
-//Verificar token
 
+//Middleware para verificar que el token sea correcto
 let verificarToken = (req, res, next) => {
 
     let token = req.get('authorization');
@@ -22,6 +22,24 @@ let verificarToken = (req, res, next) => {
 
 };
 
+//Middleware para verificar que el usuario logueado sea un admin
+let verificarAdmin = (req, res, next) => {
+    let usuario = req.usuario;
+
+    if(usuario.role !== 'ADMIN_ROLE'){
+        return res.status(401).json({
+            ok: false,
+            error: {
+                ok: false,
+                message: "No esta autorizado para realizar esta accion"
+            }
+        });
+    }
+    //En este caso es igual por lo que la peticion puede pasar
+    next();
+}
+
 module.exports = {
-    verificarToken
+    verificarToken,
+    verificarAdmin
 }
