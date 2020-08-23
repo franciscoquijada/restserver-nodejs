@@ -3,10 +3,11 @@ const bcrypt = require('bcrypt');
 const Usuario = require('../models/usuario');
 const { json } = require('body-parser');
 const jwt = require('jsonwebtoken');
+const {verificarToken} = require('../middlewares/authentication');
 
 const app = express();
 
-app.post('/login', (req, res) => {
+app.post('/login', verificarToken, (req, res) => {
 
     //Obtengo el email y password enviado a la peticion
     let body = req.body;
