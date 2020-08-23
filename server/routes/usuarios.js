@@ -44,7 +44,7 @@ app.get('/usuarios', verificarToken, (req, res) => {
 });
 
 //Peticiones post
-app.post('/usuarios', [verificarToken, verificarAdmin], function(req, res) {
+app.post('/usuarios', /*[verificarToken, verificarAdmin],*/ function(req, res) {
     let body = req.body;
 
     let usuario = new Usuario({
