@@ -8,12 +8,6 @@ const {verificarToken, verificarAdmin } = require('../middlewares/authentication
 //Peticiones get
 app.get('/usuarios', verificarToken, (req, res) => {
 
-    /*return res.json({
-        usuario: req.usuario,
-        nombre: req.usuario.nombre,
-        email: req.usuario.email
-    });*/
-
     //Obtengo desde los parametros el desde
     let desde = req.query.desde || 0;
     desde = Number(desde);
@@ -44,7 +38,7 @@ app.get('/usuarios', verificarToken, (req, res) => {
 });
 
 //Peticiones post
-app.post('/usuarios', /*[verificarToken, verificarAdmin],*/ function(req, res) {
+app.post('/usuarios', [verificarToken, verificarAdmin], function(req, res) {
     let body = req.body;
 
     let usuario = new Usuario({
