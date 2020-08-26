@@ -4,8 +4,6 @@ let {verificarToken, verificarAdmin} = require('../middlewares/authentication');
 
 let Categoria = require('../models/categoria');
 
-let Usuario = require('../models/usuario');
-
 let app = express();
 
 //Mostrar todas las categorias
