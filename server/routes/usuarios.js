@@ -34,7 +34,6 @@ app.get('/usuarios', verificarToken, (req, res) => {
             });
         });
     });
-    //res.json('Get de usuarios');
 });
 
 //Peticiones post
