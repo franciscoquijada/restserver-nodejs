@@ -1,6 +1,6 @@
 process.env.PORT = process.env.PORT || 3000;
 
-//Entorno 
+//Entorno
 
 process.env.NODE_ENV = process.env.NODE_ENV || 'dev';
 
@@ -21,7 +21,7 @@ process.env.URLDB = UrlDB;
 //24 horas
 //30 dias
 
-process.env.FECHA_VENCIMIENTO_TOKEN = 60 * 60 * 24 * 30;
+process.env.FECHA_VENCIMIENTO_TOKEN = '48h';
 
 //Seed para autenticacion
 

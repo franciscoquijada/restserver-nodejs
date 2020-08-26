@@ -18,6 +18,8 @@ app.get('/categoria', verificarToken, (req, res) => {
     limite = Number(limite);
 
     Categoria.find({}, 'descripcion')
+    //Para que devuelva los campos del usuario en la respuesta y no solo el id
+    .populate('usuario', 'nombre email role')
     .skip(desde)
     .limit(limite)
     .exec((err, categorias) => {
