@@ -2,12 +2,12 @@ const express = require("express");
 
 let {verificarAdmin, verificarToken} = require('../middlewares/authentication');
 
-let Categoria = require('../models/categoria');
+
 
 let Usuario = require('../models/usuario');
 
 let Producto = require('../models/producto');
-const categoria = require("../models/categoria");
+let Categoria = require("../models/categoria");
 
 //Mostrar todas los productos
 app.get('/producto', verificarToken, (req, res) => {
@@ -106,12 +106,49 @@ app.post('/producto', [verificarToken, verificarAdmin], (req, res) => {
 
 //Editar producto
 app.put('/producto/:id', [verificarAdmin, verificarToken], (req, res) =>{
-
+    let idProducto = req.params.id;
+    //Realizo busqueda de producto
+    Producto.findByIdAndUpdate(idProducto, (error, ProductoBd) => {
+        if(error){
+            return res.status(500).json({
+                ok: false,
+                error
+            });
+        }
+        if(!ProductoBd){
+            return res.status(400).json({
+                ok: false,
+                producto: 'El id no existe'
+            })
+        }
+        res.json({
+            ok: true, 
+            producto: ProductoBd
+        });
+    });
 });
 
 //Eliminar Producto
 app.delete('/producto/:id', [verificarAdmin, verificarToken], (req, res) => {
-
+    let idProducto = req.params.id;
+    Producto.findByIdAndDelete(idProducto, (error, ProductoBd) => {
+        if(error){
+            return res.status(500).json({
+                ok: false,
+                error
+            });
+        }
+        if(!ProductoBd){
+            return res.status(400).json({
+                ok: false,
+                error: 'El id de producto no existe'
+            });
+        }
+        res.json({
+            ok: true,
+            producto: ProductoBd
+        });
+    });
 });
 
 const app = express();
