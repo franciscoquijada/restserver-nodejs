@@ -104,13 +104,10 @@ app.post('/categoria', [verificarToken, verificarAdmin], (req, res) => {
 //Editar una categoria
 app.put('/categoria/:id', [verificarToken, verificarAdmin], (req, res) => {
     let id = req.params.id;
-
     let body = req.body;
-
     let descripcionCategoria = {
         descripcion: body.descripcion
     };
-
     Categoria.findByIdAndUpdate(id, descripcionCategoria, {new: true, runValidators: true}, (err, categoriaBd) => {
         if(err){
             return res.status(500).json({

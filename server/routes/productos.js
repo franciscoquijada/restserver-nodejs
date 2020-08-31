@@ -2,12 +2,10 @@ const express = require("express");
 
 let {verificarAdmin, verificarToken} = require('../middlewares/authentication');
 
-
-
-let Usuario = require('../models/usuario');
-
 let Producto = require('../models/producto');
-let Categoria = require("../models/categoria");
+
+const app = express();
+
 
 //Mostrar todas los productos
 app.get('/producto', verificarToken, (req, res) => {
@@ -17,11 +15,12 @@ app.get('/producto', verificarToken, (req, res) => {
     let hasta = req.query.hasta || 0;
     hasta = Number(hasta);
 
-    Producto.find({}, 'nombre precioUnitario descripcion disponible categoria usuario')
+    Producto.find({disponible: true}, 'nombre precioUnitario descripcion disponible categoria usuario')
     //Ordenar por nombre
     .sort('nombre')
     //Para que muestre los campos del usuario
     .populate('usuario', 'nombre email role')
+    .populate('categoria', 'descripcion')
     .skip(desde)
     .limit(hasta)
     .exec((error, productos) => {
@@ -45,7 +44,10 @@ app.get('/producto', verificarToken, (req, res) => {
 //Mostrar todos los productos por id
 app.get('/producto/:id', verificarToken, (req, res) =>{
     let idProducto = req.params.id;
-    Producto.findById(idProducto, (error, producto) =>{
+    Producto.findById(idProducto) 
+        .populate('usuario', 'nombre email role')
+        .populate('categoria', 'descripcion')
+        .exec((error, producto) =>{
         //Verifico error
         if(error){
             return res.status(500).json({
@@ -69,7 +71,7 @@ app.get('/producto/:id', verificarToken, (req, res) =>{
 
 //Crear producto
 app.post('/producto', [verificarToken, verificarAdmin], (req, res) => {
-    //Obtengo los parametro 
+    //Obtengo los parametro
     let body = req.body;
 
     let producto = new Producto({
@@ -77,13 +79,13 @@ app.post('/producto', [verificarToken, verificarAdmin], (req, res) => {
         precioUnitario: body.precioUnitario,
         descripcion: body.descripcion,
         disponible: body.disponible,
-        categoria: body.categoria._id,
-        usuario: body.usuario._id
+        categoria: body.categoria,
+        usuario: req.usuario._id
     });
 
     producto.save((error, productoBd) => {
         if(error){
-            return res.status(400).json({
+            return res.status(500).json({
                 ok: false,
                 error
             });
@@ -96,19 +98,26 @@ app.post('/producto', [verificarToken, verificarAdmin], (req, res) => {
             });
         }
         //En caso correcto
-        res.json({
+        res.status(201).json({
             ok: true,
             producto: productoBd
         });
-
     });
 });
 
 //Editar producto
 app.put('/producto/:id', [verificarAdmin, verificarToken], (req, res) =>{
     let idProducto = req.params.id;
+    let body = req.body;
+    let productoModificado = {
+        nombre : body.nombre,
+        precioUnitario : body.precioUnitario,
+        descripcion : body.descripcion,
+        disponible : body.disponible,
+        categoria : body.categoria
+    }
     //Realizo busqueda de producto
-    Producto.findByIdAndUpdate(idProducto, (error, ProductoBd) => {
+    Producto.findByIdAndUpdate(idProducto, productoModificado, {new: true, runValidators: true},(error, ProductoBd) => {
         if(error){
             return res.status(500).json({
                 ok: false,
@@ -118,31 +127,10 @@ app.put('/producto/:id', [verificarAdmin, verificarToken], (req, res) =>{
         if(!ProductoBd){
             return res.status(400).json({
                 ok: false,
-                producto: 'El id no existe'
+                error: {
+                    message: 'El id no existe'
+                }
             })
-        }
-        res.json({
-            ok: true, 
-            producto: ProductoBd
-        });
-    });
-});
-
-//Eliminar Producto
-app.delete('/producto/:id', [verificarAdmin, verificarToken], (req, res) => {
-    let idProducto = req.params.id;
-    Producto.findByIdAndDelete(idProducto, (error, ProductoBd) => {
-        if(error){
-            return res.status(500).json({
-                ok: false,
-                error
-            });
-        }
-        if(!ProductoBd){
-            return res.status(400).json({
-                ok: false,
-                error: 'El id de producto no existe'
-            });
         }
         res.json({
             ok: true,
@@ -151,6 +139,33 @@ app.delete('/producto/:id', [verificarAdmin, verificarToken], (req, res) => {
     });
 });
 
-const app = express();
+//Eliminar Producto
+app.delete('/producto/:id', [/*verificarAdmin,*/ verificarToken], (req, res) => {
+    let idProducto = req.params.id;
+    let productoEliminado = {
+        disponible : false,
+    }
+    Producto.findByIdAndUpdate(idProducto, productoEliminado, {new: true, runValidators: true},(error, ProductoBd) => {
+        if(error){
+            return res.status(500).json({
+                ok: false,
+                error
+            });
+        }
+        if(!ProductoBd){
+            return res.status(400).json({
+                ok: false,
+                error: {
+                    message: 'El id no existe'
+                }
+            })
+        }
+        res.json({
+            ok: true,
+            producto: ProductoBd,
+            mensaje: 'Producto borrado correctamente'
+        });
+    });
+});
 
 module.exports = app;
