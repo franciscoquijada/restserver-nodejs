@@ -73,6 +73,7 @@ app.post('/categoria', [verificarToken, verificarAdmin], (req, res) => {
     let body = req.body;
 
     let categoria = new Categoria({
+        disponible: body.disponible,
         descripcion: body.descripcion,
         usuario: req.usuario._id
     });
@@ -154,6 +155,26 @@ app.delete('/categoria/:id', [verificarToken, verificarAdmin], (req, res) => {
             });
         }
 
+        res.json({
+            ok: true,
+            categoria: categoriaBd
+        });
+    });
+});
+
+//Buscar categorias por palabras
+app.get('/categorias/buscar/:termino', (req, res) => {
+    let termino = req.params.termino;
+    let RegExpresion = new RegExp(termino, 'i');
+    Categoria.find({ descripcion: RegExpresion, disponible: true })
+    .populate('usuario', 'nombre email role')
+    .exec((error, categoriaBd) => {
+        if(error){
+            return res.status(500).json({
+                ok: false,
+                error
+            });
+        }
         res.json({
             ok: true,
             categoria: categoriaBd

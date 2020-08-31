@@ -36,6 +36,33 @@ app.get('/usuarios', verificarToken, (req, res) => {
     });
 });
 
+//Mostrar un usuario por id
+app.get('/usuario/:id', verificarToken, (req, res) => {
+    let idUsuario = req.params.id;
+    Usuario.findById(idUsuario, (err, usuarioBd) => {
+        //Si se produce error
+        if(err){
+            return res.status(500).json({
+                ok: false,
+                err
+            });
+        }
+        if(!usuarioBd){
+            return res.status(400).json({
+                ok: false,
+                err: {
+                    message: "El id de usuario no existe"
+                }
+            });
+        }
+        //En caso correcto
+        res.json({
+            ok: true,
+            usuario: usuarioBd
+        });
+    });
+});
+
 //Peticiones post
 app.post('/usuarios', [verificarToken, verificarAdmin], function(req, res) {
     let body = req.body;
@@ -120,6 +147,25 @@ app.delete('/usuario/:id', [verificarToken, verificarAdmin], function(req, res){
     });
 
     //res.json('Delete de usuarios');
+});
+
+//Buscar usuarios por palabras
+app.get('/usuarios/buscar/:termino', (req, res) => {
+    let termino = req.params.termino;
+    let RegExpresion = new RegExp(termino, 'i');
+    Usuario.find({ nombre: RegExpresion, estado: true })
+    .exec((error, usuarioBd) => {
+        if(error){
+            return res.status(500).json({
+                ok: false,
+                error
+            });
+        }
+        res.json({
+            ok: true,
+            usuario: usuarioBd
+        });
+    });
 });
 
 module.exports = app;

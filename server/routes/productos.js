@@ -187,8 +187,6 @@ app.get('/productos/buscar/:termino', (req, res) => {
             producto: productoBd
         });
     });
-
-
 });
 
 module.exports = app;
