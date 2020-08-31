@@ -168,4 +168,27 @@ app.delete('/producto/:id', [/*verificarAdmin,*/ verificarToken], (req, res) => 
     });
 });
 
+//Buscar productos por palabras
+app.get('/productos/buscar/:termino', (req, res) => {
+    let termino = req.params.termino;
+    let RegExpresion = new RegExp(termino, 'i');
+    Producto.find({ nombre: RegExpresion, disponible: true })
+    .populate('categoria', 'descripcion')
+    .populate('usuario', 'nombre email role')
+    .exec((error, productoBd) => {
+        if(error){
+            return res.status(500).json({
+                ok: false,
+                error
+            });
+        }
+        res.json({
+            ok: true,
+            producto: productoBd
+        });
+    });
+
+
+});
+
 module.exports = app;
