@@ -5,11 +5,9 @@ const { json } = require('body-parser');
 const jwt = require('jsonwebtoken');
 const {verificarToken} = require('../middlewares/authentication');
 
-
 const app = express();
 
-app.post('/login', (req, res) => {
-
+exports.signin = (req, res) => {
     //Obtengo el email y password enviado a la peticion
     let body = req.body;
 
@@ -42,12 +40,10 @@ app.post('/login', (req, res) => {
         }
 
         let token = jwt.sign({
-            usuario: usuarioBd },
+                usuario: usuarioBd },
             process.env.SEED,
             { expiresIn: process.env.FECHA_VENCIMIENTO_TOKEN }
         );
-
-        res.cookie("t", token, { expire: new Date() + 9999 });
 
         //Si todo va bien
         res.json({
@@ -56,12 +52,12 @@ app.post('/login', (req, res) => {
             token
         });
     });
-});
+}
 
-app.post('/logout', (req, res) => {
-    res.clearCookie("t");
-    res.json({ message: "Sesion Cerrada" });
-});
+// app.post('/login', (req, res) => {
+//
+//
+// });
 
 
 

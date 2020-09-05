@@ -1,5 +1,5 @@
 const moongose = require('mongoose');
-var uniqueValidator = require('mongoose-unique-validator');
+const uniqueValidator = require('mongoose-unique-validator');
 let Schema = moongose.Schema;
 
 let rolesValidos = {
@@ -7,46 +7,46 @@ let rolesValidos = {
     message: '{VALUE} no es un rol valido'
 };
 
-let usuarioSchema = new Schema({
-    nombre: {
-        type: String,
-        required: [true, "El nombre es requerido"]
+let usuarioSchema = new Schema(
+    {
+        nombre: {
+            type: String,
+            trim: true,
+            required: [true, "El nombre es requerido"],
+            maxlength: 50
+        },
+        email: {
+            type: String,
+            trim: true,
+            required: [true, "El email es requerido"],
+            unique: true
+        },
+        password: {
+            type: String,
+            required: [true, "El password es requerido"]
+        },
+        img: {
+            type: String,
+            required: false
+        },
+        role: {
+            type: String,
+            default: 'USER_ROLE',
+            enum: rolesValidos
+        },
+        estado: {
+            type: Boolean,
+            default: true
+        },
     },
-    email: {
-        type: String,
-        required: [true, "El email es requerido"],
-        unique: true
-    },
-    password: {
-        type: String,
-        required: [true, "El password es requerido"]
-    },
-    img: {
-        type: String,
-        required: false
-    },
-    role: {
-        type: String,
-        default: 'USER_ROLE',
-        enum: rolesValidos
-    },
-    estado: {
-        type: Boolean,
-        default: true
-    },
-    google: {
-        type: Boolean,
-        default: false
-    }
-});
+    { timestamps: true }
+);
 
-//No usamos funcion de flecha porque necesitamos el this
 usuarioSchema.methods.toJSON = function() {
 
     let user = this;
     let userObject = user.toObject();
     delete userObject.password;
-
     return userObject;
 }
 

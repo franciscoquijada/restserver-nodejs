@@ -15,13 +15,7 @@ if(process.env.NODE_ENV === 'dev'){
 
 process.env.URLDB = UrlDB;
 
-//Fecha de vencimiento del token
-//60 segundos
-//60 minutos
-//24 horas
-//30 dias
-
-process.env.FECHA_VENCIMIENTO_TOKEN = '48h';
+process.env.FECHA_VENCIMIENTO_TOKEN = '24h';
 
 //Seed para autenticacion
 

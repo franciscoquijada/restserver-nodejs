@@ -20,20 +20,20 @@ app.get('/producto', verificarToken, (req, res) => {
     .sort('nombre')
     //Para que muestre los campos del usuario
     .populate('usuario', 'nombre email role')
-    .populate('categoria', 'descripcion')
+    .populate('categoria', 'nombre descripcion')
     .skip(desde)
     .limit(hasta)
     .exec((error, productos) => {
         //Verifico error
         if(error){
             return res.status(400).json({
-                ok: false,
+                status: false,
                 error
             });
         }
         Producto.count({}, (error, CantidadRegistros) => {
             res.json({
-                ok: true,
+                status: true,
                 productos,
                 cantidad_registros: CantidadRegistros
             });
@@ -51,19 +51,19 @@ app.get('/producto/:id', verificarToken, (req, res) =>{
         //Verifico error
         if(error){
             return res.status(500).json({
-                ok: false,
+                status: false,
                 error
             });
         }
         //En caso de que no encuentre el id
         if(!producto){
             return res.status(400).json({
-                ok: false,
+                status: false,
                 error: 'No existe un producto con este id'
             });
         }
         res.json({
-            ok: true,
+            status: true,
             producto
         });
     });
@@ -86,20 +86,20 @@ app.post('/producto', [verificarToken, verificarAdmin], (req, res) => {
     producto.save((error, productoBd) => {
         if(error){
             return res.status(500).json({
-                ok: false,
+                status: false,
                 error
             });
         }
         //Si no pudo crear el producto
         if(!productoBd){
             return res.status(400).json({
-                ok: false,
-                err
+                status: false,
+                error
             });
         }
         //En caso correcto
         res.status(201).json({
-            ok: true,
+            status: true,
             producto: productoBd
         });
     });
@@ -120,20 +120,20 @@ app.put('/producto/:id', [verificarAdmin, verificarToken], (req, res) =>{
     Producto.findByIdAndUpdate(idProducto, productoModificado, {new: true, runValidators: true},(error, ProductoBd) => {
         if(error){
             return res.status(500).json({
-                ok: false,
+                status: false,
                 error
             });
         }
         if(!ProductoBd){
             return res.status(400).json({
-                ok: false,
+                status: false,
                 error: {
                     message: 'El id no existe'
                 }
             })
         }
         res.json({
-            ok: true,
+            status: true,
             producto: ProductoBd
         });
     });
@@ -148,20 +148,20 @@ app.delete('/producto/:id', [/*verificarAdmin,*/ verificarToken], (req, res) => 
     Producto.findByIdAndUpdate(idProducto, productoEliminado, {new: true, runValidators: true},(error, ProductoBd) => {
         if(error){
             return res.status(500).json({
-                ok: false,
+                status: false,
                 error
             });
         }
         if(!ProductoBd){
             return res.status(400).json({
-                ok: false,
+                status: false,
                 error: {
                     message: 'El id no existe'
                 }
             })
         }
         res.json({
-            ok: true,
+            status: true,
             producto: ProductoBd,
             mensaje: 'Producto borrado correctamente'
         });
@@ -178,12 +178,12 @@ app.get('/productos/buscar/:termino', (req, res) => {
     .exec((error, productoBd) => {
         if(error){
             return res.status(500).json({
-                ok: false,
+                status: false,
                 error
             });
         }
         res.json({
-            ok: true,
+            status: true,
             producto: productoBd
         });
     });

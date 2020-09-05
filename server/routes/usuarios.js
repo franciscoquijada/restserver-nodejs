@@ -15,20 +15,20 @@ app.get('/usuarios', verificarToken, (req, res) => {
     let limite = req.query.limite || 5;
     limite = Number(limite);
 
-    Usuario.find({}, 'nombre email img role estado google')
+    Usuario.find({}, 'nombre email img role estado')
     .skip(desde)
     .limit(limite)
-    .exec((err, usuarios) =>{
-        if(err){
+    .exec((error, usuarios) =>{
+        if(error){
             return res.status(400).json({
-                ok: false,
-                err: error
+                status: false,
+                error
             });
         }
         //Para devolver cantidad de registros
         Usuario.count({}, (error, cantidadRegistros) => {
             res.json({
-                ok: true,
+                status: true,
                 usuarios,
                 cantidad_registros : cantidadRegistros
             });
@@ -39,25 +39,25 @@ app.get('/usuarios', verificarToken, (req, res) => {
 //Mostrar un usuario por id
 app.get('/usuario/:id', verificarToken, (req, res) => {
     let idUsuario = req.params.id;
-    Usuario.findById(idUsuario, (err, usuarioBd) => {
+    Usuario.findById(idUsuario, (error, usuarioBd) => {
         //Si se produce error
-        if(err){
+        if(error){
             return res.status(500).json({
-                ok: false,
-                err
+                status: false,
+                error
             });
         }
         if(!usuarioBd){
             return res.status(400).json({
-                ok: false,
-                err: {
+                status: false,
+                error: {
                     message: "El id de usuario no existe"
                 }
             });
         }
         //En caso correcto
         res.json({
-            ok: true,
+            status: true,
             usuario: usuarioBd
         });
     });
@@ -74,19 +74,18 @@ app.post('/usuarios', [verificarToken, verificarAdmin], function(req, res) {
         img: body.img,
         role: body.role,
         estado: body.estado,
-        google: body.google,
     });
     //Guardo usuario en la base de datos
     usuario.save((error, usuarioBd) => {
         if(error){
             return res.status(400).json({
-                ok: false,
-                err: error
+                status: false,
+                error
             });
         }
 
         return res.json({
-            ok: true,
+            status: true,
             usuario: usuarioBd
         });
     });
@@ -103,13 +102,13 @@ app.put('/usuario/:id', [verificarToken, verificarAdmin], function(req, res) {
 
         if(error){
             return res.status(400).json({
-                ok: false,
+                status: false,
                 error
             });
         }
 
         res.json({
-            ok: true,
+            status: true,
             usuario: usuarioBd
         });
     });
@@ -129,19 +128,19 @@ app.delete('/usuario/:id', [verificarToken, verificarAdmin], function(req, res){
         //Verifico error
         if(error){
             return res.status(400).json({
-                ok: false,
+                status: false,
                 error
             });
         }
         //Si el usuario recibido es nulo
         if(!UsuarioBorrado)
             res.status(400).json({
-                ok: false,
+                status: false,
                 error: 'Usuario no existe'
             });
         //Si se pudo borrar el usuario correctamente
         res.json({
-            ok: true,
+            status: true,
             usuario: UsuarioBorrado
         });
     });
@@ -157,12 +156,12 @@ app.get('/usuarios/buscar/:termino', (req, res) => {
     .exec((error, usuarioBd) => {
         if(error){
             return res.status(500).json({
-                ok: false,
+                status: false,
                 error
             });
         }
         res.json({
-            ok: true,
+            status: true,
             usuario: usuarioBd
         });
     });
