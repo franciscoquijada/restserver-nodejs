@@ -1,2 +1,6 @@
-# restserver-nodejs
-Practica creando servicio rest con node.js y express
+# Rest-server
+Servicio rest con node.js, express, mongodb, jwt
+Entidades: 
+Usuario
+Producto
+Categoria
