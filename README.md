@@ -19,4 +19,4 @@ https://tiendafq.herokuapp.com/register
 
 Las demas peticiones se pueden detallar en el siguiente boton para que se desplieguen en postman:
 
-[![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/43fde40250c1bb5dfb29)
+[![Ver peticiones en Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/43fde40250c1bb5dfb29)
