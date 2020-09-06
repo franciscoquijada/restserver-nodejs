@@ -63,6 +63,34 @@ app.post('/logout', (req, res) => {
     res.json({ message: "Sesion Cerrada" });
 });
 
+app.post('/signup', (req, res) => {
+
+    let body = req.body;
+
+    let usuario = new Usuario({
+        nombre: body.nombre,
+        email: body.email,
+        password: bcrypt.hashSync(body.password, 10),
+        img: body.img,
+        role: body.role,
+        estado: body.estado,
+    });
+    //Guardo usuario en la base de datos
+    usuario.save((error, usuarioBd) => {
+        if(error){
+            return res.status(400).json({
+                status: false,
+                error
+            });
+        }
+
+        return res.json({
+            status: true,
+            usuario: usuarioBd
+        });
+    });
+});
+
 
 
 module.exports = app;
