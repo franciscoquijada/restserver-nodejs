@@ -9,7 +9,7 @@ El proyecto lo subi a heroku para poder probar, siendo esta la url principal:
 
 https://tiendafq.herokuapp.com
 
-Puedes iniciar sesion con estos datos, haciendo un post a https://tiendafq.herokuapp.com/login:
+Puedes iniciar sesion con estos datos, haciendo un post a https://tiendafq.herokuapp.com/login, siendo este un usuario con rol de administrador:
 
 email: testadmin@test.com
 password: 123456
