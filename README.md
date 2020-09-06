@@ -1,6 +1,8 @@
 # Rest-server Tienda Node Proyecto
-Servicio rest con node.js, express, mongodb, jwt
+Servicio rest con node.js, express, mongodb, jwt.
+
 Entidades: 
+
 Usuario
 Producto
 Categoria
