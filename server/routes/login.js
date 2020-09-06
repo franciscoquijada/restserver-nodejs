@@ -63,7 +63,7 @@ app.post('/logout', (req, res) => {
     res.json({ message: "Sesion Cerrada" });
 });
 
-app.post('/signup', (req, res) => {
+app.post('/register', (req, res) => {
 
     let body = req.body;
 
