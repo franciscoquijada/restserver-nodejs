@@ -27,41 +27,68 @@ Las demas peticiones se pueden detallar en el siguiente boton para que se despli
 Usuario
 
 Post: https://tiendafq.herokuapp.com/usuarios
+
 Post: https://tiendafq.herokuapp.com/register
+
 Get: https://tiendafq.herokuapp.com/usuarios
+
 Get: https://tiendafq.herokuapp.com/usuario/{id}
+
 Get: https://tiendafq.herokuapp.com/usuarios/buscar/{nombre}
+
 Delete: https://tiendafq.herokuapp.com/usuario/{id}
+
 PUT: https://tiendafq.herokuapp.com/usuario/{id}
+
 Logout:
+
 POST: https://tiendafq.herokuapp.com/logout
+
 Login:
+
 POST: https://tiendafq.herokuapp.com/login
 
 Producto
 
 Get: https://tiendafq.herokuapp.com/producto?desde=0&limite=3
+
 Get: https://tiendafq.herokuapp.com/producto/{id}
+
 Get: https://tiendafq.herokuapp.com/productos/buscar/{id}
+
 POST: https://tiendafq.herokuapp.com/producto
+
 DELETE: https://tiendafq.herokuapp.com/producto/{id}
+
 PUT: https://tiendafq.herokuapp.com/producto/{id}
+
 
 Tienda
 
 Get: https://tiendafq.herokuapp.com/tiendas?desde=0&limite=3
+
 Get: https://tiendafq.herokuapp.com/tienda/{id}
+
 Get: https://tiendafq.herokuapp.com/tienda/buscar/{termino}
+
 POST: https://tiendafq.herokuapp.com/tienda
+
 DELETE: https://tiendafq.herokuapp.com/tienda/{id}
+
 PUT: https://tiendafq.herokuapp.com/tienda/{id}
+
 
 Categoria:
 
 Get: https://tiendafq.herokuapp.com/categoria
+
 Get: https://tiendafq.herokuapp.com/categoria/{id}
+
 Post: https://tiendafq.herokuapp.com/categoria
+
 Delete: https://tiendafq.herokuapp.com/categoria/{id}
+
 Put: https://tiendafq.herokuapp.com/categoria/{id}
+
 
 
