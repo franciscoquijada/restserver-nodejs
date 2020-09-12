@@ -6,6 +6,7 @@ Entidades:
 Usuario
 Producto
 Categoria
+Tienda
 
 El proyecto lo subi a heroku para poder probar, siendo esta la url principal:
 
@@ -21,4 +22,4 @@ https://tiendafq.herokuapp.com/register
 
 Las demas peticiones se pueden detallar en el siguiente boton para que se desplieguen en postman:
 
-[![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/43fde40250c1bb5dfb29)
+[![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/43fde40250c1bb5dfb29#?env%5BHeroku%20Produccion%20NODE%5D=W3sia2V5IjoidXJsIiwidmFsdWUiOiJodHRwczovL3RpZW5kYWZxLmhlcm9rdWFwcC5jb20iLCJlbmFibGVkIjp0cnVlfSx7ImtleSI6InRva2VuIiwidmFsdWUiOiJleUpoYkdjaU9pSklVekkxTmlJc0luUjVjQ0k2SWtwWFZDSjkuZXlKMWMzVmhjbWx2SWpwN0luSnZiR1VpT2lKQlJFMUpUbDlTVDB4Rklpd2laWE4wWVdSdklqcDBjblZsTENKbmIyOW5iR1VpT21aaGJITmxMQ0pmYVdRaU9pSTFaalF4WTJNMFpUaG1NR00yTlRBd01UZGtObUU0WlRNaUxDSnViMjFpY21VaU9pSm1jbUZ1WTJselkyOGdjWFZwYW1Ga1lTSXNJbVZ0WVdsc0lqb2lkR1Z6ZERSQWRHVnpkQzVqYjIwaUxDSnBiV2NpT2lKbGMzUnZJR1Z6SUc5MGNtRWdhVzFoWjJWdUlpd2lYMTkySWpvd2ZTd2lhV0YwSWpveE5UazRNVE0zTVRnNUxDSmxlSEFpT2pFMk1EQTNNamt4T0RsOS5lNzlXVFlrcFlsYWFpek1kQ0c4akdJanBuR2FtSFEzb3YyWjNiRk5QNmRRIiwiZW5hYmxlZCI6dHJ1ZX1d)
