@@ -16,7 +16,7 @@ Puedes iniciar sesion con estos datos, haciendo un post a https://tiendafq.herok
 email: testadmin@test.com
 password: 123456
 
-Tambien esta el recurso:
+Tambien esta el recurso (POST):
 https://tiendafq.herokuapp.com/register
 
 Las demas peticiones se pueden detallar en el siguiente boton para que se desplieguen en postman:
