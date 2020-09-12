@@ -163,7 +163,7 @@ app.delete('/producto/:id', [/*verificarAdmin,*/ verificarToken], (req, res) => 
         res.json({
             status: true,
             producto: ProductoBd,
-            mensaje: 'Producto borrado correctamente'
+            mensaje: 'El Producto con id' + idProducto + 'fue borrado correctamente'
         });
     });
 });

@@ -2,12 +2,12 @@ const express = require('express');
 
 let {verificarToken, verificarAdmin} = require('../middlewares/authentication');
 
-let Categoria = require('../models/categoria');
+let Tienda = require('../models/tienda');
 
 let app = express();
 
-//Mostrar todas las categorias
-app.get('/categoria', verificarToken, (req, res) => {
+//Mostrar todas las tiendas
+app.get('/tiendas', verificarToken, (req, res) => {
     //Obtengo desde los parametros el desde
     let desde = req.query.desde || 0;
     desde = Number(desde);
@@ -15,14 +15,12 @@ app.get('/categoria', verificarToken, (req, res) => {
     let limite = req.query.limite || 5;
     limite = Number(limite);
 
-    Categoria.find({}, 'descripcion')
-    //Para ordernar por un campo en especifico
-    .sort('descripcion')
-    //Para que devuelva los campos del usuario en la respuesta y no solo el id
-    .populate('usuario', 'nombre email role')
+    Tienda.find({}, 'nombre direccion')
+    //Para ordernar por direccion
+    .sort('nombre')
     .skip(desde)
     .limit(limite)
-    .exec((error, categorias) => {
+    .exec((error, tiendas) => {
         if(error){
             return res.status(500).json({
                 status: false,
@@ -30,20 +28,20 @@ app.get('/categoria', verificarToken, (req, res) => {
             });
         }
         //Para devolver cantidad de registros
-        Categoria.count({}, (error, cantidadRegistros) => {
+        Tienda.count({}, (error, cantidadRegistros) => {
             res.json({
                 status: true,
-                categorias,
+                tiendas,
                 cantidad_registros : cantidadRegistros
             });
         });
     });
 });
 
-//Mostrar una categoria por id
-app.get('/categoria/:id', verificarToken, (req, res) => {
-    let idCategoria = req.params.id;
-    Categoria.findById(idCategoria, (error, categoria) => {
+//Mostrar una tienda por id
+app.get('/tienda/:id', verificarToken, (req, res) => {
+    let idTienda = req.params.id;
+    Tienda.findById(idTienda, (error, tienda) => {
         //Si se produce error
         if(error){
             return res.status(500).json({
@@ -51,7 +49,7 @@ app.get('/categoria/:id', verificarToken, (req, res) => {
                 error
             });
         }
-        if(!categoria){
+        if(!tienda){
             return res.status(400).json({
                 status: false,
                 error: {
@@ -62,24 +60,22 @@ app.get('/categoria/:id', verificarToken, (req, res) => {
         //En caso correcto
         res.json({
             status: true,
-            categoria
+            tienda
         });
     });
 });
 
-//Agregar una nueva categoria
-app.post('/categoria', [verificarToken, verificarAdmin], (req, res) => {
+//Agregar una nueva tienda
+app.post('/tienda', [verificarToken, verificarAdmin], (req, res) => {
     //Obtengo los parametros enviados por post
     let body = req.body;
 
-    let categoria = new Categoria({
+    let tienda = new Tienda({
         nombre: body.nombre,
-        disponible: body.disponible,
-        descripcion: body.descripcion,
-        usuario: req.usuario._id
+        direccion: body.direccion
     });
 
-    categoria.save((error, categoriaBd) => {
+    tienda.save((error, tiendaBd) => {
         //En caso de error
         if(error){
             return res.status(500).json({
@@ -87,8 +83,8 @@ app.post('/categoria', [verificarToken, verificarAdmin], (req, res) => {
                 error
             });
         }
-        //Si no pudo crear la categoria
-        if(!categoriaBd){
+        //Si no pudo crear la tienda
+        if(!tiendaBd){
             return res.status(400).json({
                 status: false,
                 error
@@ -97,28 +93,28 @@ app.post('/categoria', [verificarToken, verificarAdmin], (req, res) => {
         //En caso correcto
         res.json({
             status: true,
-            categoria: categoriaBd
+            tienda: tiendaBd
         });
     });
 
 });
 
-//Editar una categoria
-app.put('/categoria/:id', [verificarToken, verificarAdmin], (req, res) => {
+//Editar una tienda
+app.put('/tienda/:id', [verificarToken, verificarAdmin], (req, res) => {
     let id = req.params.id;
     let body = req.body;
-    let descripcionCategoria = {
-        descripcion: body.descripcion
+    let dataTienda = {
+        direccion: body.direccion
     };
-    Categoria.findByIdAndUpdate(id, descripcionCategoria, {new: true, runValidators: true}, (error, categoriaBd) => {
+    Tienda.findByIdAndUpdate(id, dataTienda, {new: true, runValidators: true}, (error, tiendaBd) => {
         if(error){
             return res.status(500).json({
                 status: false,
                 error
             });
         }
-        //Si no existe la categoria
-        if(!categoriaBd){
+        //Si no existe la tienda
+        if(!tiendaBd){
             return res.status(400).json({
                 status: false,
                 error: {
@@ -128,17 +124,17 @@ app.put('/categoria/:id', [verificarToken, verificarAdmin], (req, res) => {
         }
         res.json({
             status: true,
-            categoria: categoriaBd
+            tienda: tiendaBd
         });
     });
 });
 
-//Eliminar una categoria
-app.delete('/categoria/:id', [verificarToken, verificarAdmin], (req, res) => {
+//Eliminar una tienda
+app.delete('/tienda/:id', [verificarToken, verificarAdmin], (req, res) => {
     //Obtengo el id
     let id = req.params.id;
 
-    Categoria.findByIdAndDelete(id, (error, categoriaBd) => {
+    Tienda.findByIdAndDelete(id, (error, tiendaBd) => {
         if(error){
             return res.status(400).json({
                 status: false,
@@ -146,8 +142,8 @@ app.delete('/categoria/:id', [verificarToken, verificarAdmin], (req, res) => {
             });
         }
 
-        //Si no existe la categoria
-        if(!categoriaBd){
+        //Si no existe la tienda
+        if(!tiendaBd){
             return res.status(400).json({
                 status: false,
                 error: {
@@ -158,19 +154,18 @@ app.delete('/categoria/:id', [verificarToken, verificarAdmin], (req, res) => {
 
         res.json({
             status: true,
-            mensaje: "La categoria " + id + " fue borrada correctamente",
-            categoria: categoriaBd
+            mensaje: "La tienda con id: " + id + " fue eliminada correctamente.",
+            tienda: tiendaBd
         });
     });
 });
 
-//Buscar categorias por palabras
-app.get('/categorias/buscar/:termino', (req, res) => {
+//Buscar tiendas por palabras
+app.get('/tienda/buscar/:termino', (req, res) => {
     let termino = req.params.termino;
     let RegExpresion = new RegExp(termino, 'i');
-    Categoria.find({ descripcion: RegExpresion, disponible: true })
-    .populate('usuario', 'nombre email role')
-    .exec((error, categoriaBd) => {
+    Tienda.find({ nombre: RegExpresion, disponible: true })
+    .exec((error, tiendaBd) => {
         if(error){
             return res.status(500).json({
                 status: false,
@@ -179,7 +174,7 @@ app.get('/categorias/buscar/:termino', (req, res) => {
         }
         res.json({
             status: true,
-            categoria: categoriaBd
+            tienda: tiendaBd
         });
     });
 });

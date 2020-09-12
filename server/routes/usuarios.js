@@ -141,7 +141,8 @@ app.delete('/usuario/:id', [verificarToken, verificarAdmin], function(req, res){
         //Si se pudo borrar el usuario correctamente
         res.json({
             status: true,
-            usuario: UsuarioBorrado
+            mensaje: "El usuario con id: " + id + " fue eliminada correctamente.",
+            usuario: UsuarioBorrado,
         });
     });
 
